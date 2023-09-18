@@ -1,7 +1,6 @@
 import React from 'react';
 import { MobileSidebar } from './MobileSidebar';
 
-interface NavbarProps { }
 
 export const Navbar = async () => {
   return (
