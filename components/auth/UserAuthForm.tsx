@@ -7,7 +7,7 @@ import { signIn, useSession } from 'next-auth/react'
 import * as React from 'react'
 import { FC, useEffect, useState } from 'react'
 import toast from "react-hot-toast"
-import { Icons } from './Icons'
+import { Icons } from '../Icons'
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {

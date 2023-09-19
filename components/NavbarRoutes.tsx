@@ -4,8 +4,8 @@ import { User } from '@prisma/client';
 import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import SignIn from './SignIn';
-import { UserAccountNav } from './UserAccountNav';
+import SignIn from './auth/SignIn';
+import { UserAccountNav } from './auth/UserAccountNav';
 
 interface NavbarRoutesProps {
   user: User | null

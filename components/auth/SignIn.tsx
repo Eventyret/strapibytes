@@ -1,7 +1,7 @@
 "use client"
 import { Button, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { useState } from 'react';
-import { Icons } from './Icons';
+import { Icons } from '../Icons';
 import UserAuthForm from './UserAuthForm';
 import { Key } from 'lucide-react';
 
