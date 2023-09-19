@@ -1,12 +1,16 @@
 "use client"
 
-import { UserButton } from '@clerk/nextjs';
+import { User } from '@prisma/client';
 import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import SignIn from './SignIn';
+import { UserAccountNav } from './UserAccountNav';
 
-
-export const NavbarRoutes = () => {
+interface NavbarRoutesProps {
+  user: User | null
+}
+export const NavbarRoutes: React.FC<NavbarRoutesProps> = ({ user }) => {
   const pathname = usePathname();
 
   const isTeacherPage = pathname?.startsWith('/teacher');
@@ -18,11 +22,16 @@ export const NavbarRoutes = () => {
           <LogOut className='h-4 w-4 mr-2' /> Exit
         </Link>
       ) : (
-        <Link href={ "teacher/courses" } className='hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 py-1'>
-          Teacher Mode
-        </Link>
+        user && user?.role !== "USER" ? (
+          <Link href={ "/teacher/courses" } className='hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 py-1'>
+            Teacher Mode
+          </Link>
+
+        ) : (
+          null
+        )
       ) }
-      <UserButton afterSignOutUrl='/' />
+      { user ? <UserAccountNav user={ user } /> : <SignIn /> }
     </div>
   );
 }
