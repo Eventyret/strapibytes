@@ -17,8 +17,7 @@ import {
   FormMessage,
   FormItem,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button, Input } from '@nextui-org/react';
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -95,6 +94,7 @@ const CreatePage = () => {
               <Button
                 type="submit"
                 disabled={ !isValid || isSubmitting }
+                color={ !isValid || isSubmitting ? 'secondary' : 'primary' }
               >
                 Continue
               </Button>
