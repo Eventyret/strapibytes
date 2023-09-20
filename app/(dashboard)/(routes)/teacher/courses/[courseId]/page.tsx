@@ -1,9 +1,10 @@
 import { IconBadge } from '@/components/icon-badge';
 import { getUser } from '@/lib/auth/auth';
 import { db } from '@/lib/prisma';
-import { LayoutDashboard } from 'lucide-react';
+import { LayoutDashboard, ListChecks } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { CategoryForm } from './_components/CategoryForm';
 import { DescriptionForm } from './_components/DescriptionForm';
 import { ImageForm } from './_components/ImageForm';
 import { TitleForm } from './_components/TitleForm';
@@ -61,7 +62,18 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
           <TitleForm initialData={ course } courseId={ course.id } />
           <DescriptionForm initialData={ course } courseId={ course.id } />
           <ImageForm initialData={ course } courseId={ course.id } />
-          <ImageForm initialData={ course } courseId={ course.id } />
+          <CategoryForm initialData={ course } courseId={ course.id } options={ categories.map(category => ({ label: category.name, value: category.id })) } />
+        </div>
+        <div className='space-y-6'>
+          <>
+            <div className='flex items-center gap-x-2'>
+              <IconBadge icon={ ListChecks } />
+              <h2 className='text-xl'>Course Chapters</h2>
+            </div>
+            <div>
+              TODO: Chapters
+            </div>
+          </>
         </div>
       </div>
     </div>

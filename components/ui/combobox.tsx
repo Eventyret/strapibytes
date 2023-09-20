@@ -1,22 +1,16 @@
 "use client"
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-
-import { cn } from "@/lib/utils"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from '@nextui-org/react'
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
+import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
 interface ComboboxProps {
   options: { label: string; value: string }[];
@@ -24,16 +18,13 @@ interface ComboboxProps {
   onChange: (value: string) => void;
 };
 
-export const Combobox = ({
-  options,
-  value,
-  onChange
-}: ComboboxProps) => {
-  const [open, setOpen] = React.useState(false)
+export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>((props, ref) => {
+  const { options, value, onChange } = props;
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <Popover open={ open } onOpenChange={ setOpen }>
-      <PopoverTrigger asChild>
+    <Popover isOpen={ open } onOpenChange={ setOpen }>
+      <PopoverTrigger>
         <Button
           variant="bordered"
           role="combobox"
@@ -47,13 +38,15 @@ export const Combobox = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        <Command>
+
+        <Command className='w-full'>
           <CommandInput placeholder="Search option..." />
           <CommandEmpty>No option found.</CommandEmpty>
           <CommandGroup>
             { options.map((option) => (
               <CommandItem
                 key={ option.value }
+                className='w-full'
                 onSelect={ () => {
                   onChange(option.value === value ? "" : option.value)
                   setOpen(false)
@@ -72,5 +65,7 @@ export const Combobox = ({
         </Command>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+});
+
+Combobox.displayName = "Combobox";
