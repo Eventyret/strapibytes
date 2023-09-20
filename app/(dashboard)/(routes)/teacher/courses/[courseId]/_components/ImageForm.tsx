@@ -39,15 +39,14 @@ export const ImageForm: React.FC<ImageFormProps> = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course image updated");
-      toggleEdit()
-      router.refresh()
-    } catch (error) {
-      toast.error("Something went wrong");
-
-    }
+    const response = axios.patch(`/api/courses/${courseId}`, values);
+    await toast.promise(response, {
+      loading: "Finalizing image upload...",
+      success: "Course image uploaded",
+      error: "Something went wrong",
+    })
+    toggleEdit();
+    router.refresh();
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (

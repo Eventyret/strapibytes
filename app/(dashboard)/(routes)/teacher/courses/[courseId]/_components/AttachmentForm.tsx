@@ -1,16 +1,15 @@
 "use client";
 
-import * as z from "zod";
+import { Attachment, Course } from "@prisma/client";
 import axios from "axios";
-import { Pencil, PlusCircle, ImageIcon, File, Loader2, X } from "lucide-react";
+import { File, Loader2, PlusCircle, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { Attachment, Course } from "@prisma/client";
-import Image from "next/image";
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
+import { Button } from "@/components/ui/button";
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] };
@@ -33,27 +32,26 @@ export const AttachmentForm = ({
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.post(`/api/courses/${courseId}/attachments`, values);
-      toast.success("Course attachments updated");
-      toggleEdit();
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
-    }
+    const response = axios.post(`/api/courses/${courseId}/attachments`, values);
+    await toast.promise(response, {
+      loading: "Finalizing attachment upload...",
+      success: "Attachment uploaded",
+      error: "Something went wrong",
+    })
+    toggleEdit();
+    router.refresh();
   };
 
   const onDelete = async (id: string) => {
-    try {
-      setDeletingId(id);
-      await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
-      toast.success("Attachment deleted");
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setDeletingId(null);
-    }
+    setDeletingId(id);
+    const response = axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+    await toast.promise(response, {
+      loading: "Removing attachment...",
+      success: "Attachment Removed",
+      error: "Something went wrong",
+    })
+    router.refresh();
+    setDeletingId(null);
   }
 
   return (
@@ -84,7 +82,10 @@ export const AttachmentForm = ({
               { initialData.attachments.map((attachment) => (
                 <div
                   key={ attachment.id }
-                  className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-md"
+                  className={ `flex items-center p-3 w-full border text-sky-700 rounded-md ${deletingId === attachment.id
+                    ? "bg-red-500 border-red-500 text-white"
+                    : "bg-sky-100 border-sky-200"
+                    }` }
                 >
                   <File className="h-4 w-4 mr-2 flex-shrink-0" />
                   <p className="text-xs line-clamp-1">
@@ -92,7 +93,7 @@ export const AttachmentForm = ({
                   </p>
                   { deletingId === attachment.id && (
                     <div>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin ml-4" />
                     </div>
                   ) }
                   { deletingId !== attachment.id && (
