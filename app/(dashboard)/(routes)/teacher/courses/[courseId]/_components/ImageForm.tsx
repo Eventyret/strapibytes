@@ -74,15 +74,15 @@ export const ImageForm: React.FC<ImageFormProps> = ({
       </div>
       { !isEditing && (
         !initialData.imageUrl ? (
-          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+          <div className="flex items-center justify-center h-20 bg-slate-200 rounded-md">
             <ImageIcon className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
-          <div className="relative aspect-video mt-2">
+          <div className="relative aspect-w-16 aspect-h-9 mt-2 h-32 flex items-center justify-center">
             <Image
               alt="Upload"
               fill
-              className="object-contain rounded-md"
+              className="object-contain rounded-md flex justify-center items-center"
               src={ initialData.imageUrl }
             />
           </div>

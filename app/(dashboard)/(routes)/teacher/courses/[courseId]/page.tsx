@@ -8,6 +8,7 @@ import { CategoryForm } from './_components/CategoryForm';
 import { DescriptionForm } from './_components/DescriptionForm';
 import { ImageForm } from './_components/ImageForm';
 import { TitleForm } from './_components/TitleForm';
+import { PriceForm } from './_components/PriceForm';
 
 interface SingleCourseProps {
   params: {
@@ -78,6 +79,7 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
                 <IconBadge icon={ CircleDollarSign } />
                 <h2 className='text-xl'>Sell your course</h2>
               </div>
+              <PriceForm initialData={ course } courseId={ course.id } />
             </>
           </>
         </div>
