@@ -10,11 +10,10 @@ import toast from "react-hot-toast";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Course } from '@prisma/client';
 
 interface DescriptionFormProps {
-  initialData: {
-    description: string;
-  };
+  initialData: Course;
   courseId: string;
 }
 
@@ -34,7 +33,6 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ...initialData,
       description: initialData.description || "",
     },
   });

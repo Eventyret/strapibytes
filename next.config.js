@@ -10,6 +10,7 @@ const nextConfig = {
       "avatars.githubusercontent.com",
       "github.com",
       "randomuser.me",
+      "utfs.io",
     ],
   },
 };
