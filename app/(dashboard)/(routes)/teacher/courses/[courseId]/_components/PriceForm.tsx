@@ -1,5 +1,6 @@
 "use client";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { formatPrice } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
@@ -60,7 +61,17 @@ export const PriceForm: React.FC<PriceFormProps> = ({
           { isEditing ? <>Cancel</> : <>Edit Price</> }
         </Button>
       </div>
-      { !isEditing && <p className={ cn("text-sm mt-2 inline-flex items-center", !initialData.price && "text-slate-500 italic") }>{ <><DollarSign />{ initialData.price || "No Price" }</> }</p> }
+      { !isEditing && (
+        <p className={ cn(
+          "text-sm mt-2",
+          !initialData.price && "text-slate-500 italic"
+        ) }>
+          { initialData.price
+            ? formatPrice(initialData.price)
+            : "No price"
+          }
+        </p>
+      ) }
       { isEditing && (
         <Form { ...form }>
           <form
