@@ -1,7 +1,7 @@
 import { IconBadge } from '@/components/icon-badge';
 import { getUser } from '@/lib/auth/auth';
 import { db } from '@/lib/prisma';
-import { LayoutDashboard, ListChecks } from 'lucide-react';
+import { CircleDollarSign, LayoutDashboard, ListChecks } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { CategoryForm } from './_components/CategoryForm';
@@ -73,6 +73,12 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
             <div>
               TODO: Chapters
             </div>
+            <>
+              <div className='flex items-center gap-x-2'>
+                <IconBadge icon={ CircleDollarSign } />
+                <h2 className='text-xl'>Sell your course</h2>
+              </div>
+            </>
           </>
         </div>
       </div>
