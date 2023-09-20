@@ -6,6 +6,9 @@ import { Pencil } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import toast from "react-hot-toast";
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface TitleFormProps {
   initialData: {
@@ -25,13 +28,24 @@ export const TitleForm: React.FC<TitleFormProps> = ({
   courseId,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
   const { isSubmitting, isValid } = form.formState;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.patch(`/api/courses/${courseId}`, values);
+      toast.success("Course title updated");
+      toggleEdit()
+      router.refresh()
+    } catch (error) {
+      toast.error("Something went wrong");
+
+    }
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (
