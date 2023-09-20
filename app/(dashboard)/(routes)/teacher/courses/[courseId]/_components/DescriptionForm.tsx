@@ -1,16 +1,16 @@
 "use client";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { cn } from '@/lib/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Input, Textarea } from "@nextui-org/react";
+import { Button, Textarea } from "@nextui-org/react";
+import { Course } from '@prisma/client';
+import axios from 'axios';
 import { Pencil } from "lucide-react";
+import { useRouter } from 'next/navigation';
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import toast from "react-hot-toast";
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { Course } from '@prisma/client';
+import * as z from "zod";
 
 interface DescriptionFormProps {
   initialData: Course;
@@ -39,15 +39,13 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course description updated");
-      toggleEdit()
-      router.refresh()
-    } catch (error) {
-      toast.error("Something went wrong");
-
-    }
+    const response = axios.patch(`/api/courses/${courseId}`, values);
+    toast.promise(response, {
+      loading: "Giving your course a description...",
+      success: "Course updated",
+      error: "Something went wrong",
+    })
+    toggleEdit()
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (

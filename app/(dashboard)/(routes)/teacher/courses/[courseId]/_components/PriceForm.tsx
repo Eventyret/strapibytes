@@ -38,15 +38,14 @@ export const PriceForm: React.FC<PriceFormProps> = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course price updated");
-      toggleEdit()
-      router.refresh()
-    } catch (error) {
-      toast.error("Something went wrong");
-
-    }
+    const response = axios.patch(`/api/courses/${courseId}`, values);
+    toast.promise(response, {
+      loading: "Updating your course price...",
+      success: "Course updated",
+      error: "Something went wrong",
+    })
+    toggleEdit()
+    router.refresh()
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (

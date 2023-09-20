@@ -52,14 +52,15 @@ export const CategoryForm = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
-      toggleEdit();
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
-    }
+    const response = axios.patch(`/api/courses/${courseId}`, values);
+    toast.promise(response, {
+      loading: "Updating your course category...",
+      success: "Course updated",
+      error: "Something went wrong",
+    })
+    toggleEdit();
+    router.refresh();
+
   }
 
   const selectedOption = options.find((option) => option.value === initialData.categoryId);
