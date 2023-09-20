@@ -4,7 +4,6 @@ import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -17,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Button } from '@nextui-org/react'
 
 interface ComboboxProps {
   options: { label: string; value: string }[];
@@ -35,7 +35,7 @@ export const Combobox = ({
     <Popover open={ open } onOpenChange={ setOpen }>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="bordered"
           role="combobox"
           aria-expanded={ open }
           className="w-full justify-between"

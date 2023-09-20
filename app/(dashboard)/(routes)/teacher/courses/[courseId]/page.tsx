@@ -29,6 +29,8 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
     return redirect('/')
   }
 
+  const categories = await db.category.findMany()
+
   const requiredFields = [
     course.title,
     course.description,
@@ -58,6 +60,7 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
           </div>
           <TitleForm initialData={ course } courseId={ course.id } />
           <DescriptionForm initialData={ course } courseId={ course.id } />
+          <ImageForm initialData={ course } courseId={ course.id } />
           <ImageForm initialData={ course } courseId={ course.id } />
         </div>
       </div>
