@@ -64,6 +64,11 @@ export const TitleForm: React.FC<TitleFormProps> = ({
                 </FormItem>
               ) }
             />
+            <div className='flex itesm-center gap-x-2'>
+              <Button disabled={ !isValid || isSubmitting } type='submit' color={ !isValid ? "default" : "success" } className='text-white'>
+                Save
+              </Button>
+            </div>
           </form>
         </Form>
       ) }
