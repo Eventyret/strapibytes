@@ -73,19 +73,22 @@ export const ChaptersForm = ({
   }
 
   const onReorder = async (updateData: { id: string; position: number }[]) => {
-    try {
-      setIsUpdating(true);
+    setIsUpdating(true);
+    toast.promise(axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+      list: updateData
+    }), {
+      loading: "Reordering chapters...",
+      success: (data) => {
+        router.refresh();
+        return "Chapters reordered";
+      },
+      error: (err) => {
+        console.log(err)
+        return `${err.toString()}`;
+      },
+    })
+    setIsUpdating(false);
 
-      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
-        list: updateData
-      });
-      toast.success("Chapters reordered");
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setIsUpdating(false);
-    }
   }
 
   const onEdit = (id: string) => {
