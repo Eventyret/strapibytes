@@ -38,8 +38,8 @@ export const AttachmentForm = ({
       success: "Attachment uploaded",
       error: "Something went wrong",
     })
-    toggleEdit();
     router.refresh();
+    toggleEdit();
   };
 
   const onDelete = async (id: string) => {

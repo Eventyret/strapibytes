@@ -45,8 +45,8 @@ export const ImageForm: React.FC<ImageFormProps> = ({
       success: "Course image uploaded",
       error: "Something went wrong",
     })
-    toggleEdit();
     router.refresh();
+    toggleEdit();
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (

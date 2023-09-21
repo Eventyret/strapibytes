@@ -2,13 +2,13 @@
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
+import axios from 'axios';
 import { Pencil } from "lucide-react";
+import { useRouter } from 'next/navigation';
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import toast from "react-hot-toast";
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import * as z from "zod";
 
 interface TitleFormProps {
   initialData: {
@@ -37,15 +37,15 @@ export const TitleForm: React.FC<TitleFormProps> = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course title updated");
-      toggleEdit()
-      router.refresh()
-    } catch (error) {
-      toast.error("Something went wrong");
 
-    }
+    const response = axios.patch(`/api/courses/${courseId}`, values);
+    toast.promise(response, {
+      loading: "Updating course title...",
+      success: "Course title updated",
+      error: "Something went wrong",
+    })
+    router.refresh()
+    toggleEdit()
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (

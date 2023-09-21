@@ -53,13 +53,13 @@ export const CategoryForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = axios.patch(`/api/courses/${courseId}`, values);
-    toast.promise(response, {
+    await toast.promise(response, {
       loading: "Updating your course category...",
       success: "Course updated",
       error: "Something went wrong",
     })
-    toggleEdit();
     router.refresh();
+    toggleEdit();
 
   }
 

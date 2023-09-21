@@ -40,18 +40,19 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = axios.patch(`/api/courses/${courseId}`, values);
-    toast.promise(response, {
+    await toast.promise(response, {
       loading: "Giving your course a description...",
       success: "Course updated",
       error: "Something went wrong",
     })
+    router.refresh();
     toggleEdit()
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (
     <div className='mt-6 border bg-slate-100 roudned-md p-4'>
       <div className='font-medium flex items-center justify-between'>
-        Course Title
+        Course Description
         <Button
           variant='light'
           className='mr-2'

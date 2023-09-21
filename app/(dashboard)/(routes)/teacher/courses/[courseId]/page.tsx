@@ -4,12 +4,13 @@ import { db } from '@/lib/prisma';
 import { CircleDollarSign, File, LayoutDashboard, ListChecks } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { AttachmentForm } from './_components/AttachmentForm';
 import { CategoryForm } from './_components/CategoryForm';
+import { ChaptersForm } from './_components/ChaptersForm';
 import { DescriptionForm } from './_components/DescriptionForm';
 import { ImageForm } from './_components/ImageForm';
-import { TitleForm } from './_components/TitleForm';
 import { PriceForm } from './_components/PriceForm';
-import { AttachmentForm } from './_components/AttachmentForm';
+import { TitleForm } from './_components/TitleForm';
 
 interface SingleCourseProps {
   params: {
@@ -25,9 +26,15 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
 
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId
+      id: params.courseId,
+      userId: user.id
     },
     include: {
+      chapters: {
+        orderBy: {
+          position: 'asc'
+        }
+      },
       attachments: {
         orderBy: {
           createdAt: 'desc'
@@ -46,7 +53,8 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
     course.description,
     course.imageUrl,
     course.price,
-    course.categoryId
+    course.categoryId,
+    course.chapters.some(chapter => chapter.isPublished)
   ]
   const totalFields = requiredFields.length
   const completedFields = requiredFields.filter(Boolean).length
@@ -80,7 +88,7 @@ const SingleCourse: React.FC<SingleCourseProps> = async ({ params }) => {
               <h2 className='text-xl'>Course Chapters</h2>
             </div>
             <div>
-              TODO: Chapters
+              <ChaptersForm initialData={ course } courseId={ course.id } />
             </div>
             <>
               <div className='flex items-center gap-x-2'>
