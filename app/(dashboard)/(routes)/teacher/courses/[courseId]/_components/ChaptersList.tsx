@@ -1,7 +1,7 @@
 "use client"
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { DragDropContext, Draggable, DropResult, Droppable } from '@hello-pangea/dnd';
-import { Badge } from '@nextui-org/react';
 import { Chapter } from '@prisma/client';
 import { Grip, Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -89,7 +89,7 @@ export const ChaptersList = ({
                     { chapter.title }
                     <div className="ml-auto pr-2 flex items-center gap-x-2">
                       { chapter.isFree && (
-                        <Badge>
+                        <Badge className='bg-green-300 text-white'>
                           Free
                         </Badge>
                       ) }
