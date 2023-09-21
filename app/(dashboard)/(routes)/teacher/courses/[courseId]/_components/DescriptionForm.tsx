@@ -39,14 +39,17 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = axios.patch(`/api/courses/${courseId}`, values);
-    await toast.promise(response, {
+    toast.promise(axios.patch(`/api/courses/${courseId}`, values), {
       loading: "Giving your course a description...",
-      success: "Course updated",
-      error: "Something went wrong",
+      success: (data) => {
+        router.refresh()
+        toggleEdit()
+        return "Course updated"
+      },
+      error: (err) => {
+        return `${err.toString()}`;
+      }
     })
-    router.refresh();
-    toggleEdit()
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (

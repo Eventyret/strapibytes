@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { ChapterTitleForm } from './_components/ChapterTitleForm';
+import { ChapterDescriptionForm } from './_components/DescriptionForm';
 
 interface SingleChapterProps {
   params: {
@@ -68,6 +69,10 @@ const SingleChapter: React.FC<SingleChapterProps> = async ({ params }) => {
               courseId={ params.courseId }
               chapterId={ params.chapterId } />
           </>
+          <ChapterDescriptionForm
+            initialData={ chapter }
+            courseId={ params.courseId }
+            chapterId={ params.chapterId } />
         </div>
       </div>
     </div>
