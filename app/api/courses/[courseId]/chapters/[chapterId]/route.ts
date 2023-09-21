@@ -1,11 +1,11 @@
-import { getUserRole } from '@/lib/auth/auth';
+import { getUserId, getUserRole } from '@/lib/auth/auth';
 import { db } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function PATCH(req: Request, { params }: { params: { courseId: string, chapterId: string } }) {
   try {
-    const userId = await getUserRole();
-    const values = await req.json();
+    const userId = await getUserId();
+    const { isPublished, ...values } = await req.json();
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
