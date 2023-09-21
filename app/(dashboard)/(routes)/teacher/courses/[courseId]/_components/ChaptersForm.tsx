@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from '@nextui-org/react';
+import { ChaptersList } from './ChaptersList';
 
 // import { ChaptersList } from "./chapters-list";
 
@@ -65,19 +66,9 @@ export const ChaptersForm = ({
           return "Chapter Created";
         },
         error: (err) => {
-
           return `Something went wrong: ${err.toString()}`;
         },
       },
-      {
-        style: {
-          minWidth: '250px',
-        },
-        success: {
-          duration: 5000,
-          icon: '🔥',
-        },
-      }
     )
   }
 
@@ -160,11 +151,11 @@ export const ChaptersForm = ({
           !initialData.chapters.length && "text-slate-500 italic"
         ) }>
           { !initialData.chapters.length && "No chapters" }
-          {/* <ChaptersList
+          <ChaptersList
             onEdit={ onEdit }
             onReorder={ onReorder }
             items={ initialData.chapters || [] }
-          /> */}
+          />
         </div>
       ) }
       { !isCreating && (

@@ -8,6 +8,11 @@ export const getAuthSession = () => {
   return getServerSession(authOptions);
 };
 
+export const getUserId = async () => {
+  const session = await getAuthSession()
+  return session?.user?.id
+}
+
 export const getUserRole = async () => {
   const user = await getUser()
   return user?.role
