@@ -80,15 +80,14 @@ export const ChaptersForm = ({
       loading: "Reordering chapters...",
       success: (data) => {
         router.refresh();
-        return "Chapters reordered";
+        setIsUpdating(false);
+        return "Chapter reordered";
       },
       error: (err) => {
-        console.log(err)
+        setIsUpdating(false);
         return `${err.toString()}`;
       },
     })
-    setIsUpdating(false);
-
   }
 
   const onEdit = (id: string) => {
