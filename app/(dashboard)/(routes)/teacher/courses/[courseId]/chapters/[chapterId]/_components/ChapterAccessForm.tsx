@@ -1,37 +1,39 @@
 "use client";
+import { Preview } from "@/components/preview";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Textarea } from "@nextui-org/react";
-import { Course } from "@prisma/client";
+import { Button, Checkbox } from "@nextui-org/react";
+import { Chapter } from "@prisma/client";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { CircleDollarSign, EyeIcon, Key, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
 
-interface DescriptionFormProps {
-  initialData: Course;
+interface ChapterAccessFormProps {
+  initialData: Chapter;
   courseId: string;
+  chapterId: string;
 }
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
-  }),
+  isFree: z.boolean().default(false),
 });
 
-export const DescriptionForm: React.FC<DescriptionFormProps> = ({
+export const ChapterAccessForm: React.FC<ChapterAccessFormProps> = ({
   initialData,
   courseId,
+  chapterId,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
@@ -39,45 +41,54 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData.description || "",
+      isFree: !!initialData.isFree || false,
     },
   });
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    toast.promise(axios.patch(`/api/courses/${courseId}`, values), {
-      loading: "Giving your course a description...",
-      success: (data) => {
-        router.refresh();
-        toggleEdit();
-        return "Course updated";
-      },
-      error: (err) => {
-        return `${err.toString()}`;
-      },
-    });
+    toast.promise(
+      axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values),
+      {
+        loading: "Updating permissions for chapter...",
+        success: (data) => {
+          router.refresh();
+          toggleEdit();
+          return "Chapter Permission updated";
+        },
+        error: (err) => {
+          return `${err.toString()}`;
+        },
+      }
+    );
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (
     <div className='mt-6 border bg-slate-100 roudned-md p-4'>
       <div className='font-medium flex items-center justify-between'>
-        Course Description
+        Chapter Access
         <Button
           variant='light'
           className='mr-2'
           startContent={isEditing ? null : <Pencil />}
           onClick={toggleEdit}>
-          {isEditing ? <>Cancel</> : <>Edit Description</>}
+          {isEditing ? <>Cancel</> : <>Edit Access</>}
         </Button>
       </div>
       {!isEditing && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
-          )}>
-          {initialData.description || "No Description"}
-        </p>
+        <div className={cn("text-sm mt-2 text-slate-500 italic")}>
+          {initialData.isFree ? (
+            <div className='inline-flex items-center'>
+              <EyeIcon className='m-2' />
+              This chapter is free for preview
+            </div>
+          ) : (
+            <div className='inline-flex items-center'>
+              <CircleDollarSign className='m-2' />
+              This chapter is only available to enrolled students.
+            </div>
+          )}
+        </div>
       )}
       {isEditing && (
         <Form {...form}>
@@ -86,17 +97,20 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
             className='space-y-4 mt-4'>
             <FormField
               control={form.control}
-              name='description'
+              name='isFree'
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
                   <FormControl>
-                    <Textarea
-                      isDisabled={isSubmitting}
-                      placeholder='e.g. This course is about...'
-                      {...field}
-                    />
+                    <Checkbox
+                      defaultSelected={initialData.isFree}
+                      isSelected={field.value}
+                      onChange={field.onChange}
+                      color='primary'>
+                      <span className='text-sm text-slate-500 italic'>
+                        Check this box to make this chapter free for preview
+                      </span>
+                    </Checkbox>
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />

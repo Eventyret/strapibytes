@@ -1,13 +1,19 @@
 "use client";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { formatPrice } from '@/lib/format';
-import { cn } from '@/lib/utils';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { formatPrice } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
-import { Course } from '@prisma/client';
-import axios from 'axios';
+import { Course } from "@prisma/client";
+import axios from "axios";
 import { DollarSign, Pencil } from "lucide-react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -19,20 +25,20 @@ interface PriceFormProps {
 }
 
 const formSchema = z.object({
-  price: z.coerce.number()
-})
+  price: z.coerce.number(),
+});
 
 export const PriceForm: React.FC<PriceFormProps> = ({
   initialData,
   courseId,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: initialData.price || 0.01
+      price: initialData.price || 0.01,
     },
   });
   const { isSubmitting, isValid } = form.formState;
@@ -43,9 +49,9 @@ export const PriceForm: React.FC<PriceFormProps> = ({
       loading: "Updating your course price...",
       success: "Course updated",
       error: "Something went wrong",
-    })
-    router.refresh()
-    toggleEdit()
+    });
+    router.refresh();
+    toggleEdit();
   };
   const toggleEdit = () => setIsEditing(!isEditing);
   return (
@@ -55,48 +61,57 @@ export const PriceForm: React.FC<PriceFormProps> = ({
         <Button
           variant='light'
           className='mr-2'
-          startContent={ isEditing ? null : <Pencil /> }
-          onClick={ toggleEdit }>
-          { isEditing ? <>Cancel</> : <>Edit Price</> }
+          startContent={isEditing ? null : <Pencil />}
+          onClick={toggleEdit}>
+          {isEditing ? <>Cancel</> : <>Edit Price</>}
         </Button>
       </div>
-      { !isEditing && (
-        <p className={ cn(
-          "text-sm mt-2",
-          !initialData.price && "text-slate-500 italic"
-        ) }>
-          { initialData.price
-            ? formatPrice(initialData.price)
-            : "No price"
-          }
+      {!isEditing && (
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.price && "text-slate-500 italic"
+          )}>
+          {initialData.price ? formatPrice(initialData.price) : "No price"}
         </p>
-      ) }
-      { isEditing && (
-        <Form { ...form }>
+      )}
+      {isEditing && (
+        <Form {...form}>
           <form
-            onSubmit={ form.handleSubmit(onSubmit) }
+            onSubmit={form.handleSubmit(onSubmit)}
             className='space-y-4 mt-4'>
             <FormField
-              control={ form.control }
+              control={form.control}
               name='price'
-              render={ ({ field }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {/* @ts-ignore */ }
-                    <Input isDisabled={ isSubmitting } placeholder="Set a price for your course" step="0.01" type='number' startContent={ <DollarSign /> } { ...field } />
+                    {/* @ts-ignore */}
+                    <Input
+                      isDisabled={isSubmitting}
+                      placeholder='Set a price for your course'
+                      step='0.01'
+                      type='number'
+                      startContent={<DollarSign />}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              ) }
+              )}
             />
             <div className='flex itesm-center gap-x-2'>
-              <Button disabled={ !isValid || isSubmitting } type='submit' color={ !isValid ? "default" : "success" } className='text-white'>
+              <Button
+                disabled={!isValid || isSubmitting}
+                type='submit'
+                color={!isValid ? "default" : "primary"}
+                className='text-white'>
                 Save
               </Button>
             </div>
           </form>
         </Form>
-      ) }
+      )}
     </div>
   );
 };

@@ -108,7 +108,7 @@ export const ChapterDescriptionForm: React.FC<ChapterDescriptionFormProps> = ({
               <Button
                 disabled={!isValid || isSubmitting}
                 type='submit'
-                color={!isValid ? "default" : "success"}
+                color={!isValid ? "default" : "primary"}
                 className='text-white'>
                 Save
               </Button>
