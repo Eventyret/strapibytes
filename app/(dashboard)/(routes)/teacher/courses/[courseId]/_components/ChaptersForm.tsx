@@ -19,30 +19,27 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Button } from '@nextui-org/react';
-import { ChaptersList } from './ChaptersList';
+import { Button } from "@nextui-org/react";
+import { ChaptersList } from "./ChaptersList";
 
 // import { ChaptersList } from "./chapters-list";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
   courseId: string;
-};
+}
 
 const formSchema = z.object({
   title: z.string().min(1),
 });
 
-export const ChaptersForm = ({
-  initialData,
-  courseId
-}: ChaptersFormProps) => {
+export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const toggleCreating = () => {
     setIsCreating((current) => !current);
-  }
+  };
 
   const router = useRouter();
 
@@ -53,10 +50,10 @@ export const ChaptersForm = ({
     },
   });
 
-  const { isSubmitting, isValid, } = form.formState;
+  const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    toast.promise(
+    await toast.promise(
       axios.post(`/api/courses/${courseId}/chapters`, values),
       {
         loading: "Creating your Course Chapter...",
@@ -68,103 +65,109 @@ export const ChaptersForm = ({
         error: (err) => {
           return `Something went wrong: ${err.toString()}`;
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const onReorder = async (updateData: { id: string; position: number }[]) => {
     setIsUpdating(true);
-    toast.promise(axios.put(`/api/courses/${courseId}/chapters/reorder`, {
-      list: updateData
-    }), {
-      loading: "Reordering chapters...",
-      success: (data) => {
-        router.refresh();
-        setIsUpdating(false);
-        return "Chapter reordered";
-      },
-      error: (err) => {
-        setIsUpdating(false);
-        return `${err.toString()}`;
-      },
-    })
-  }
+    await toast.promise(
+      axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        list: updateData,
+      }),
+      {
+        loading: "Reordering chapters...",
+        success: (data) => {
+          router.refresh();
+          setIsUpdating(false);
+          return "Chapter reordered";
+        },
+        error: (err) => {
+          setIsUpdating(false);
+          return `${err.toString()}`;
+        },
+      }
+    );
+  };
 
   const onEdit = (id: string) => {
     router.push(`/teacher/courses/${courseId}/chapters/${id}`);
-  }
+  };
 
   return (
-    <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
-      { isUpdating && (
-        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center">
-          <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+    <div className='relative mt-6 border bg-slate-100 rounded-md p-4'>
+      {isUpdating && (
+        <div className='absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center'>
+          <Loader2 className='animate-spin h-6 w-6 text-sky-700' />
         </div>
-      ) }
-      <div className="font-medium flex items-center justify-between">
+      )}
+      <div className='font-medium flex items-center justify-between'>
         Course chapters
-        <Button onClick={ toggleCreating } variant="light">
-          { isCreating ? (
+        <Button
+          onClick={toggleCreating}
+          variant='light'>
+          {isCreating ? (
             <>Cancel</>
           ) : (
             <>
-              <PlusCircle className="h-4 w-4 mr-2" />
+              <PlusCircle className='h-4 w-4 mr-2' />
               Add a chapter
             </>
-          ) }
+          )}
         </Button>
       </div>
-      { isCreating && (
-        <Form { ...form }>
+      {isCreating && (
+        <Form {...form}>
           <form
-            onSubmit={ form.handleSubmit(onSubmit) }
-            className="space-y-4 mt-4"
-          >
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='space-y-4 mt-4'>
             <FormField
-              control={ form.control }
-              name="title"
-              render={ ({ field }) => (
+              control={form.control}
+              name='title'
+              render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
-                      disabled={ isSubmitting }
+                      disabled={isSubmitting}
                       placeholder="e.g. 'Introduction to the course'"
-                      { ...field }
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              ) }
+              )}
             />
             <Button
-              disabled={ !isValid || isSubmitting }
-              isLoading={ isSubmitting }
-              color={ isSubmitting ? "default" : (isValid ? "success" : "secondary") }
-              type="submit"
-            >
-              { isSubmitting ? 'Saving...' : 'Create' }
+              disabled={!isValid || isSubmitting}
+              isLoading={isSubmitting}
+              color={
+                isSubmitting ? "default" : isValid ? "success" : "secondary"
+              }
+              type='submit'>
+              {isSubmitting ? "Saving..." : "Create"}
             </Button>
           </form>
         </Form>
-      ) }
-      { !isCreating && (
-        <div className={ cn(
-          "text-sm mt-2",
-          !initialData.chapters.length && "text-slate-500 italic"
-        ) }>
-          { !initialData.chapters.length && "No chapters" }
+      )}
+      {!isCreating && (
+        <div
+          className={cn(
+            "text-sm mt-2",
+            !initialData.chapters.length && "text-slate-500 italic"
+          )}>
+          {!initialData.chapters.length && "No chapters"}
           <ChaptersList
-            onEdit={ onEdit }
-            onReorder={ onReorder }
-            items={ initialData.chapters || [] }
+            onEdit={onEdit}
+            onReorder={onReorder}
+            items={initialData.chapters || []}
           />
         </div>
-      ) }
-      { !isCreating && (
-        <p className="text-xs text-muted-foreground mt-4">
+      )}
+      {!isCreating && (
+        <p className='text-xs text-muted-foreground mt-4'>
           Drag and drop to reorder the chapters
         </p>
-      ) }
+      )}
     </div>
-  )
-}
+  );
+};

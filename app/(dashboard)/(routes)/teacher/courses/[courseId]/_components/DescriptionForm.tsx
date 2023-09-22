@@ -45,7 +45,7 @@ export const DescriptionForm: React.FC<DescriptionFormProps> = ({
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    toast.promise(axios.patch(`/api/courses/${courseId}`, values), {
+    await toast.promise(axios.patch(`/api/courses/${courseId}`, values), {
       loading: "Giving your course a description...",
       success: (data) => {
         router.refresh();
