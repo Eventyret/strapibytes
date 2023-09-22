@@ -2,6 +2,7 @@
 
 import { Chapter, MuxData } from "@prisma/client";
 import axios from "axios";
+import MuxPlayer from "@mux/mux-player-react";
 import { Pencil, PlusCircle, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -79,7 +80,7 @@ export const ChapterVideoForm = ({
           </div>
         ) : (
           <div className='relative aspect-video mt-2'>
-            {/* <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} /> */}
+            <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
           </div>
         ))}
       {isEditing && (
