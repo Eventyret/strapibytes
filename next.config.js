@@ -1,30 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    serverActions: true,
     serverComponentsExternalPackages: ["@prisma/client"],
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "github.com",
-      },
-      {
-        protocol: "https",
-        hostname: "randomuser.me",
-      },
-      {
-        protocol: "https",
-        hostname: "utfs.io",
-      },
+    domains: [
+      "avatars.githubusercontent.com",
+      "github.com",
+      "randomuser.me",
+      "utfs.io",
+      "lh3.googleusercontent.com",
     ],
   },
 };
