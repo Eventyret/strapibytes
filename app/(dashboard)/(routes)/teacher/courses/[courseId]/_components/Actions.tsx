@@ -3,11 +3,12 @@
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import toast from "react-hot-toast";
 
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
+import { useConfettiStore } from "@/hooks/use-confetti.store";
 
 interface ActionsProps {
   disabled: boolean;
@@ -18,6 +19,7 @@ interface ActionsProps {
 export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const useConfetti = useConfettiStore();
 
   const onClick = async () => {
     setIsLoading(true);
@@ -28,7 +30,10 @@ export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
 
     await toast.promise(axios.patch(`/api/courses/${courseId}/${action}`), {
       loading: "Setting the stage...",
-      success: () => successMessage,
+      success: () => {
+        if (!isPublished) useConfetti.onOpen();
+        return successMessage;
+      },
       error: "Oops! The stage lights tripped.",
     });
 
