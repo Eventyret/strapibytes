@@ -50,14 +50,14 @@ export const ChapterActions = ({
     await toast.promise(
       axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`),
       {
-        loading: "Turning the page - Processing...",
+        loading: "Reeling back the footage...",
         success: () => {
-          toast.success("Chapter deleted");
+          toast.success("Chapter removed from the playlist.");
           router.refresh();
           router.push(`/teacher/courses/${courseId}`);
-          return "Hot off the press - Chapter Published!";
+          return "Cut from the final edit!";
         },
-        error: () => "Plot twist! There's been a snag.",
+        error: () => "Take two! Something went wrong.",
       }
     );
     setIsLoading(false);
