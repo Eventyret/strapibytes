@@ -28,41 +28,33 @@ export const CourseProgressButton = ({
   const onClick = async () => {
     setIsLoading(true);
 
-    const action = isCompleted ? "delete" : "put";
     const endpoint = `/api/courses/${courseId}/chapters/${chapterId}/progress`;
     const data = { isCompleted: !isCompleted };
-    const axiosRequest =
-      action === "delete" ? axios.delete(endpoint) : axios.put(endpoint, data);
 
     const loadingMessage = isCompleted
-      ? "Removing the bookmark..."
-      : "Turning the page...";
+      ? "Revisiting the chapter..."
+      : "Wrapping up this chapter...";
     const successMessage = isCompleted
-      ? "Chapter reopened. More to explore!"
-      : "Chapter completed. Onward!";
-    const errorMessage = "Oops! The plot thickens, something went wrong.";
+      ? "Back for more insights!"
+      : "Well done! Chapter completed.";
+    const errorMessage = "Oops! The quill broke, couldn't update the chapter.";
 
-    await toast
-      .promise(axiosRequest, {
-        loading: loadingMessage,
-        success: () => {
-          if (!isCompleted) {
-            if (!nextChapterId) {
-              confetti.onOpen();
-            } else {
-              router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
-            }
+    await toast.promise(axios.put(endpoint, data), {
+      loading: loadingMessage,
+      success: () => {
+        if (!isCompleted) {
+          if (!nextChapterId) {
+            confetti.onOpen();
           } else {
-            router.refresh();
-            router.push(`/teacher/courses`);
+            router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
           }
-          return successMessage;
-        },
-        error: errorMessage,
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+        }
+        return successMessage;
+      },
+      error: errorMessage,
+    });
+    router.refresh();
+    setIsLoading(false);
   };
 
   const Icon = isCompleted ? XCircle : CheckCircle;
@@ -72,7 +64,7 @@ export const CourseProgressButton = ({
       onClick={onClick}
       disabled={isLoading}
       type="button"
-      color={isCompleted ? "secondary" : "success"}
+      color={isCompleted ? "primary" : "success"}
       className="w-full md:w-auto">
       {isCompleted ? "Not completed" : "Mark as complete"}
       <Icon className="h-4 w-4 ml-2" />
