@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/prisma";
 import { getCourses } from "@/actions/get-courses";
-import { CoursesList } from "@/components/CourseList";
+import { CoursesList } from "@/components/CoursesList";
 
 import { getUserId } from "@/lib/auth/auth";
 import { Categories } from "./_components/categories";
