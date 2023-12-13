@@ -11,7 +11,7 @@ export default async function Dashboard() {
   const userId = await getUserId();
 
   if (!userId) {
-    return redirect("/search");
+    return <div>Not working</div>;
   }
 
   const { completedCourses, coursesInProgress } = await getDashboardCourses(
