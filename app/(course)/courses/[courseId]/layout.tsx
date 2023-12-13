@@ -58,7 +58,7 @@ const CourseLayout: React.FC<CourseLayoutProps> = async ({
           progressCount={progressCount}
         />
       </div>
-      <main className="md:pl-80 h-full">{children}</main>
+      <main className="md:pl-80 pt-[80px] h-full">{children}</main>
     </div>
   );
 };

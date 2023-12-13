@@ -1,3 +1,5 @@
-export const isTeacher = (userId?: string | null) => {
-  return userId === process.env.NEXT_PUBLIC_TEACHER_ID;
+import { User } from '@prisma/client';
+
+export const isTeacher = (user?: Pick<User, "role">) => {
+  return user?.role === 'TEACHER' || user?.role === 'ADMIN';
 }

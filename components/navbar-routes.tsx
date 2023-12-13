@@ -37,7 +37,7 @@ export const NavbarRoutes = ({ user }: NavbarRoutesProps) => {
               Exit
             </Button>
           </Link>
-        ) : isTeacher(user?.id) ? (
+        ) : user && isTeacher(user) ? (
           <Link href="/teacher/courses">
             <Button
               size="sm"
