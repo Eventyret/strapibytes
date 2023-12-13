@@ -1,15 +1,15 @@
 import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 
-import { getChapter } from "@/actions/get-chapter";
-import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 
-import { VideoPlayer } from "./_components/video-player";
-import { CourseEnrollButton } from "./_components/course-enroll-button";
-import { CourseProgressButton } from "./_components/course-progress-button";
 import { getUserId } from "@/lib/auth/auth";
+import { getChapter } from "@/actions/get-chapter";
+import { Banner } from "@/components/Banner";
+import { VideoPlayer } from "./_components/video-player";
+import { CourseProgressButton } from "./_components/course-progress-button";
+import { CourseEnrollButton } from "./_components/course-enroll-button";
 
 const ChapterIdPage = async ({
   params,

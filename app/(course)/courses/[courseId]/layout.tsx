@@ -1,24 +1,24 @@
-import { getProgress } from "@/actions/get-progress";
-import { getUserId } from "@/lib/auth/auth";
-import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import React from "react";
+
+import { getProgress } from "@/actions/get-progress";
+
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
+import { getUserId } from "@/lib/auth/auth";
+import { db } from "@/lib/prisma";
 
-interface CourseLayoutProps {
-  children: React.ReactNode;
-  params: {
-    courseId: string;
-  };
-}
-
-const CourseLayout: React.FC<CourseLayoutProps> = async ({
+const CourseLayout = async ({
   children,
   params,
+}: {
+  children: React.ReactNode;
+  params: { courseId: string };
 }) => {
   const userId = await getUserId();
-  if (!userId) return redirect("/");
+
+  if (!userId) {
+    return redirect("/");
+  }
 
   const course = await db.course.findUnique({
     where: {
@@ -42,8 +42,13 @@ const CourseLayout: React.FC<CourseLayoutProps> = async ({
       },
     },
   });
-  if (!course) return redirect("/");
+
+  if (!course) {
+    return redirect("/");
+  }
+
   const progressCount = await getProgress(userId, course.id);
+
   return (
     <div className="h-full">
       <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
@@ -52,7 +57,7 @@ const CourseLayout: React.FC<CourseLayoutProps> = async ({
           progressCount={progressCount}
         />
       </div>
-      <div className="hidden md:flex h-full w-80 flex-col inset-y-0 z-50">
+      <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
         <CourseSidebar
           course={course}
           progressCount={progressCount}
