@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 
-export const isTeacher = (user?: Pick<User, "role">) => {
-  return user?.role === 'TEACHER' || user?.role === 'ADMIN';
+export const isTeacher = (user?: Partial<User>) => {
+  return user?.role === Role.TEACHER || user?.role === Role.ADMIN;
 }

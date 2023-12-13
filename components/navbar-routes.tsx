@@ -34,7 +34,7 @@ export const NavbarRoutes = ({ user }: NavbarRoutesProps) => {
               size="sm"
               variant="ghost">
               <LogOut className="h-4 w-4 mr-2" />
-              Exit
+              {isCoursePage ? "Exit Course" : "Exit Teacher Mode"}
             </Button>
           </Link>
         ) : user && isTeacher(user) ? (

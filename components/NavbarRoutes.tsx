@@ -21,7 +21,7 @@ export const NavbarRoutes: React.FC<NavbarRoutesProps> = ({ user }) => {
         <Link
           href={"/"}
           className="inline-flex justify-center items-center hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 py-1">
-          <LogOut className="h-4 w-4 mr-2" /> Exit
+          <LogOut className="h-4 w-4 mr-2" /> Exit Teacher Mode
         </Link>
       ) : user && user?.role !== "USER" ? (
         <Link
